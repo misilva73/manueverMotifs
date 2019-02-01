@@ -103,6 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-#pyCharm
+# pyCharm
 .idea/
 .DS_Store
+
+# Extra folders
+data-uah/
