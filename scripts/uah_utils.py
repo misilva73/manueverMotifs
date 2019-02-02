@@ -4,6 +4,29 @@ import numpy as np
 from scipy import signal as signal
 
 
+def add_event_partition_to_motif(motif_dic_list, events_ts):
+    motif_event_dic_list = []
+    for motif_dic in motif_dic_list:
+        motif_event_dic = motif_dic
+        motif_event_dic['n_brakes'] = 0
+        motif_event_dic['n_turns'] = 0
+        motif_event_dic['n_accelerations'] = 0
+        for member_pointers in motif_dic['members_ts_pointers']:
+            member_events_list = [events_ts[i] for i in member_pointers]
+            motif_event_dic['n_brakes'] += np.sum([member_event == 1 for member_event in member_events_list])
+            motif_event_dic['n_turns'] += np.sum([member_event == 2 for member_event in member_events_list])
+            motif_event_dic['n_accelerations'] += np.sum([member_event == 3 for member_event in member_events_list])
+        motif_event_list = [motif_event_dic['n_brakes'], motif_event_dic['n_turns'], motif_event_dic['n_accelerations']]
+        if np.mean(motif_event_list) == 0:
+            motif_event_dic['dispersion'] = 0
+            motif_event_dic['event_label'] = 0
+        else:
+            motif_event_dic['dispersion'] = round(np.std(motif_event_list)/float(np.mean(motif_event_list)), 2)
+            motif_event_dic['event_label'] = np.argmax(motif_event_list) + 1
+        motif_event_dic_list.append(motif_event_dic)
+    return motif_event_dic_list
+
+
 def get_full_point_uah_data(data_path, compute_jerk=False):
     # initialize data variable as list
     data_list = []

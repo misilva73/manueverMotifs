@@ -1,7 +1,6 @@
 import time
 import pandas as pd
 import numpy as np
-import math
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pyclustering.cluster import kmedoids
@@ -128,39 +127,3 @@ def fit_agglomerative_model(dist_matrix, k, method='single'):
     score = silhouette_score(dist_matrix, cluster_labels, metric='precomputed')
     return cluster_labels, score
 
-
-def plot_label_distribution(cluster_list, y_main, y_sec=None):
-    # get unique cluster labels
-    cluster_set = set(cluster_list)
-    k = len(cluster_set)
-    # define grid configs for the plots
-    rows = math.ceil(k/5)
-    if rows == 1:
-        cols = k
-    else:
-        cols = 5
-    # plot main label distribution
-    i = 1
-    plt.figure(figsize=(17, 3.5*rows))
-    plt.suptitle('Main label distribution')
-    for cluster in cluster_set:
-        temp_list = y_main[cluster_list == cluster]
-        values, counts = np.unique(temp_list, return_counts=True)
-        plt.subplot(rows, cols, i)
-        plt.bar(values, counts)
-        plt.title('Cluster {} - {} windows'.format(cluster, len(temp_list)))
-        i += 1
-    plt.show()
-    # plot secondary label distribution
-    if y_sec is not None:
-        i = 1
-        plt.figure(figsize=(17, 4*rows))
-        plt.suptitle('Secondary label distribution')
-        for cluster in cluster_set:
-            temp_list = y_sec[cluster_list == cluster]
-            values, counts = np.unique(temp_list, return_counts=True)
-            plt.subplot(rows, cols, i)
-            plt.bar(values, counts)
-            plt.title('Cluster {} - {} windows'.format(cluster, len(temp_list)))
-            i += 1
-        plt.show()
