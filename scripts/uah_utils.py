@@ -39,8 +39,8 @@ def get_full_point_uah_data(data_path, compute_jerk=False):
             # transform and join trip files
             trip_df = transform_uah_trip_data(inertial_df, gps_df, events_df)
             # add ids and labels to trip_df
-            trip_df['user_id'] = root.split('/')[3].split('-')[2]
-            trip_df['trip_id'] = root.split('/')[3].split('-')[0]
+            trip_df['user_id'] = root.split('/')[-1].split('-')[2]
+            trip_df['trip_id'] = root.split('/')[-1].split('-')[0]
             trip_df['trip_label'] = get_trip_labels(root, len(trip_df.index))
             trip_df['road'] = get_road_type(root)
             # append trip to data_list
