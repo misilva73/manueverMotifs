@@ -5,6 +5,66 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
+def plot_single_motif(ts, events_ts, motif_dic, y_label='Full 1-d time-series'):
+    """
+    This function creates the base visualization for a single motif:
+     1) plot with the whole time-series highlighting the labels and the position of each motif's member
+     2) plot with all the motif's members
+     3) plot with the motif's center
+    :param ts: original 1-dimensional time-series
+    :param events_ts: list of labels for each entry in ts
+    :param motif_dic: dictionary related to the motif
+    :param y_label: label to add in the y-axis of the first plot (optional and defaults to 'Full 1-d time-series')
+    :return: fig - figure with the motif plot
+    """
+    member_pointers = motif_dic['members_ts_pointers']
+    center_pointers = motif_dic['center_ts_pointers']
+    raw_event_df = pd.DataFrame([ts, events_ts]).T.reset_index()
+    raw_event_df.columns = ['index', 'var', 'event']
+    event_df = raw_event_df[raw_event_df['event'] > 0]
+    # Plots:
+    fig = plt.figure(figsize=(12, 6))
+    plt.suptitle(motif_dic['pattern'])
+    # subplot 1
+    plt.subplot2grid((2, 2), (0, 0), colspan=2)
+    plt.plot(ts, 'xkcd:grey', alpha=0.5)
+    for temp_point in member_pointers:
+        plt.plot(temp_point, ts[temp_point], 'xkcd:dark grey')
+    sns.scatterplot(x="index", y="var", hue="event", data=event_df, legend=False,
+                    palette=sns.xkcd_palette(['red', 'tangerine', 'grass green']))
+    plt.ylabel(y_label)
+    plt.xlabel('')
+    plt.ylim(min(ts), max(ts))
+    # subplot 2
+    plt.subplot2grid((2, 2), (1, 0))
+    for temp_point in member_pointers:
+        plt.plot(ts[temp_point], 'xkcd:dark grey')
+    plt.ylabel("Motif's members")
+    plt.ylim(min(ts), max(ts))
+    # subplot 3
+    plt.subplot2grid((2, 2), (1, 1))
+    plt.plot(ts[center_pointers], 'xkcd:dark grey')
+    plt.ylabel("Motif's center")
+    plt.ylim(min(ts), max(ts))
+    return fig
+
+
+def plot_k_motifs(k, ts, events_ts, motif_dic_list):
+    """
+    This function shows the base visualisation for the first k motifs in motif_dic_list for the original 1-d time-series
+    :param k: number of motifs to plot
+    :param ts: original 1-dimensional time-series
+    :param events_ts: list of labels for each entry in ts
+    :param motif_dic_list: list of dictionaries, where a dic is related to a single motif
+    :param yaxis_label:
+    :return: No return - shows the plots
+    """
+    for motif_dic in motif_dic_list[0:k]:
+        plot_single_motif(ts, events_ts, motif_dic)
+        plt.show()
+
+
+
 def plot_motif_clusters(ts, events_ts, motif_event_dic_list, cluster_labels):
     cluster_set = set(cluster_labels)
     for cluster in cluster_set:
