@@ -112,7 +112,7 @@ def transform_uah_trip_data(inertial_df, gps_df, events_df):
     # get vector with speed observations
     speed_vec = gps_df['speed']
     # apply FIR upsampling to get 10 observations per second
-    upsampled_speed_vec = signal.resample_poly(speed_vec , 10, 1)
+    upsampled_speed_vec = signal.resample_poly(speed_vec, 10, 1)
     upsampled_timestamp_vec = np.concatenate(gps_df['timestamp'].apply(lambda x: np.round(np.arange(x, x+1, 0.1), 1)))
     # build upsampled speed df and exclude 3s
     # of observations in the begginign and end of trip
@@ -125,7 +125,7 @@ def transform_uah_trip_data(inertial_df, gps_df, events_df):
     # left-join data from event_df
     joined_df = measurements_df\
         .merge(events_df[["timestamp", "type", "level"]], how='left', on='timestamp') \
-        .rename(columns={'type' : 'event_type', 'level' : 'event_level'})
+        .rename(columns={'type': 'event_type', 'level': 'event_level'})
     # concatenate events and levels and drop the two columns
     final_df = joined_df\
         .assign(event_type=lambda x: x['event_type'].apply(lambda y: 0 if np.isnan(y) else y),
