@@ -140,3 +140,37 @@ def plot_zoomin_lat_motif(ts, motif_dic, events_ts,  x_lim):
     plt.ylim(min(ts) - 0.01, max(ts) + 0.01)
     plt.xlim(x_lim)
     return fig
+
+
+def plot_single_lat_motif_for_paper(ts, events_ts, motif_dic):
+    member_pointers = motif_dic['members_ts_pointers']
+    center_pointers = motif_dic['center_ts_pointers']
+    raw_event_df = pd.DataFrame([ts, events_ts]).T.reset_index()
+    raw_event_df.columns = ['index', 'var', 'event']
+    lat_event_df = raw_event_df[raw_event_df['event'] == 2]
+    # Plots:
+    fig = plt.figure(figsize=(9, 6))
+    # subplot 1
+    plt.subplot2grid((2, 2), (0, 0), colspan=2)
+    plt.plot(ts, 'xkcd:grey', alpha=0.5)
+    for temp_point in member_pointers:
+        plt.plot(temp_point, ts[temp_point], 'xkcd:dark grey')
+    sns.scatterplot(x="index", y="var", hue="event", data=lat_event_df, legend=False,
+                    palette=sns.xkcd_palette(['tangerine']))
+    plt.ylabel('')
+    plt.xlabel('')
+    plt.ylim(min(ts) - 0.01, max(ts) + 0.01)
+    # subplot 2
+    plt.subplot2grid((2, 2), (1, 0))
+    for temp_point in member_pointers:
+        plt.plot(ts[temp_point], 'xkcd:dark grey')
+    plt.xlabel("Motif's members")
+    plt.ylabel("")
+    plt.ylim(min(ts) - 0.01, max(ts) + 0.01)
+    # subplot 3
+    plt.subplot2grid((2, 2), (1, 1))
+    plt.plot(ts[center_pointers], 'xkcd:dark grey')
+    plt.xlabel("Motif's center")
+    plt.ylabel("")
+    plt.ylim(min(ts) - 0.01, max(ts) + 0.01)
+    return fig
