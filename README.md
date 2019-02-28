@@ -1,4 +1,11 @@
-# manueverMotifs
+# manueverMotifs - Finding maneuver motifs in vehicle telematics
+
+***
+
+## Overview
+
+This repository aims to support the work presented in paper *Finding maneuver motifs in vehicle telematics*. 
+
 
 output_folder = os.path.abspath(os.path.join(cwd, os.pardir, 'data-motifs'))
 motif_file_name = 'motif_lat_acc_aggressive_trip.p'
