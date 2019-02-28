@@ -1,15 +1,19 @@
-# manueverMotifs - Finding maneuver motifs in vehicle telematics
+## Finding maneuver motifs in vehicle telematics
 
-***
+This repository aims to support the work presented in paper *Finding maneuver motifs in vehicle telematics* by 
+presenting all the analysis and figures present in the paper.
 
-## Overview
+In this paper, we investigated a new way of identifying manoeuvres from vehicle telematics data, motif detection 
+in time-series. We implemented a slightly modified version of the 
+[*Extended Motif Discovery* (EMD) algorithm](https://github.com/misilva73/extendedMD), 
+a classical variable-length motif detection algorithm for time-series and we applied it to the 
+[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/), 
+a publicly available naturalistic driving dataset.
 
-This repository aims to support the work presented in paper *Finding maneuver motifs in vehicle telematics*. 
+Particularly, we ran two different experiments. In the first, we aimed to identify acceleration and brakes from 
+the longitudinal acceleration time-series and, in the second, we aimed to identify turns from the lateral acceleration 
+time-series. The folders `experiments-lateral` and `experiments-longitudinal` contain the jupyter notebooks with the
+results of these experiments.
 
-
-output_folder = os.path.abspath(os.path.join(cwd, os.pardir, 'data-motifs'))
-motif_file_name = 'motif_lat_acc_aggressive_trip.p'
-dist_file_name = 'dist_lat_acc_aggressive_trip.npy'
-
-motif_dic_list = pickle.load(open(os.path.join(output_folder, motif_file_name), 'rb'))
-center_dist_mat = np.load(os.path.join(output_folder, dist_file_name))
+Additionally, the folder `paper-figs` contains the plots used in the paper and the jupyter notebook that generated those
+plots.
