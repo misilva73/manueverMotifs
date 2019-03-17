@@ -13,7 +13,7 @@ decorator==4.3.2
 defusedxml==0.5.0
 dtaidistance==1.1.4
 entrypoints==0.3
-extendedMD==0.8
+extendedMD>=0.8
 idna==2.8
 ipykernel==5.1.0
 ipython==7.2.0
